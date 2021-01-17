@@ -5,6 +5,7 @@ import (
 	"errors"
 	"github.com/jackc/pgx"
 	"module1/pkg/models"
+	"strconv"
 	"time"
 )
 
@@ -12,10 +13,11 @@ type SnippetModel struct {
 	Conn *pgx.ConnPool
 }
 
-func (m *SnippetModel) Insert(title, content string, expires int) (int, error) {
+func (m *SnippetModel) Insert(title, content, expires string) (int, error) {
 	stmt := `INSERT INTO snippets (title, content, created, expires)
 			 VALUES($1, $2, $3, $4) returning id`
-	res := m.Conn.QueryRow(stmt, title, content, time.Now(), time.Now().AddDate(0,0,expires))
+	intValue, _ := strconv.Atoi(expires)
+	res := m.Conn.QueryRow(stmt, title, content, time.Now(), time.Now().AddDate(0, 0, intValue))
 	var id int
 	err := res.Scan(&id)
 	if err != nil {
@@ -61,4 +63,3 @@ func (m *SnippetModel) Latest() ([]*models.Snippet, error) {
 
 	return snippets, nil
 }
-
