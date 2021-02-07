@@ -29,7 +29,7 @@ func main() {
 	errorLog := log.New(os.Stderr, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
 
 	config := pgx.ConnConfig{
-		Host:     "localhost",
+		Host:     "postgresdb",
 		Port:     5432,
 		Database: "GoDB",
 		User:     "postgres",
